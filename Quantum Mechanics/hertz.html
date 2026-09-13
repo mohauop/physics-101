@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hertz's Discovery Simulation</title>
+    <style>
+        body { font-family: sans-serif; background: #121212; color: #fff; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        canvas { background: #050505; border: 2px solid #333; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <h2>Hertz's Spark-Gap Experiment</h2>
+    <canvas id="hertzCanvas" width="800" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById('hertzCanvas');
+        const ctx = canvas.getContext('2d');
+        let time = 0, waves = [];
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const txX = 150, rxX = 650, centerY = 200, freq = 0.1;
+            const chargeY = centerY + Math.sin(time * freq) * 70;
+            
+            if (Math.abs(Math.sin(time * freq)) > 0.98 && time % 5 === 0) waves.push({ r: 0, alpha: 1 });
+
+            waves.forEach((w, i) => {
+                w.r += 3; w.alpha -= 0.003;
+                if (w.alpha <= 0) waves.splice(i, 1);
+                else { ctx.beginPath(); ctx.arc(txX, centerY, w.r, -Math.PI/2.5, Math.PI/2.5); ctx.strokeStyle = `rgba(255, 150, 50, ${w.alpha})`; ctx.stroke(); }
+            });
+
+            ctx.fillStyle = '#888'; ctx.fillRect(txX - 5, centerY - 80, 10, 160); ctx.fillRect(rxX - 5, centerY - 80, 10, 160);
+            ctx.beginPath(); ctx.arc(txX, chargeY, 8, 0, Math.PI * 2); ctx.fillStyle = '#ff4444'; ctx.fill();
+            
+            const inducedY = centerY + Math.sin((time - 166) * freq) * 32;
+            ctx.beginPath(); ctx.arc(rxX, inducedY, 6, 0, Math.PI * 2); ctx.fillStyle = '#44aaff'; ctx.fill();
+
+            time++; requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>

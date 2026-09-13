@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Multi-Slit Interference</title>
+    <style>
+        body { font-family: sans-serif; background: #121212; color: #fff; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        canvas { background: #000; border: 2px solid #333; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <h2>Multi-Slit Interference</h2>
+    <canvas id="slitCanvas" width="800" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById('slitCanvas');
+        const ctx = canvas.getContext('2d');
+        let time = 0;
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const numSlits = 3, slitD = 40, waveL = 20, barrierX = 150, screenX = 700;
+            const slits = [-40, 0, 40].map(y => canvas.height/2 + y);
+
+            ctx.lineWidth = 1.0;
+            for (let r = (time % waveL); r < screenX - barrierX; r += waveL) {
+                slits.forEach(slitY => {
+                    ctx.beginPath(); ctx.arc(barrierX, slitY, r, -Math.PI/2.5, Math.PI/2.5);
+                    ctx.strokeStyle = `rgba(100, 255, 150, ${Math.max(0, 0.8 - r/500)})`; ctx.stroke();
+                });
+            }
+
+            ctx.fillStyle = '#222'; ctx.fillRect(screenX, 0, 100, canvas.height); 
+            ctx.beginPath(); ctx.moveTo(screenX, 0);
+            
+            for (let y = 0; y < canvas.height; y++) {
+                let sumCos = 0, sumSin = 0;
+                for(let i = 0; i < numSlits; i++) {
+                    const d = Math.sqrt(Math.pow(screenX - barrierX, 2) + Math.pow(y - slits[i], 2));
+                    sumCos += Math.cos((2 * Math.PI * d) / waveL);
+                    sumSin += Math.sin((2 * Math.PI * d) / waveL);
+                }
+                const intensity = (sumCos * sumCos + sumSin * sumSin) / (numSlits * numSlits);
+                ctx.lineTo(screenX + intensity * 80, y);
+            }
+            ctx.strokeStyle = '#00ff88'; ctx.lineWidth = 2; ctx.stroke();
+            time += 0.5; requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>
