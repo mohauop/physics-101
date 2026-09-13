@@ -9,7 +9,6 @@ We will dive into the simulations and codes provided by the most advanced experi
 
 
 
-$$ \hat{H}|\psi\rangle = E|\psi\rangle $$
 
 
 
