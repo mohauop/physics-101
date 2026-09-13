@@ -2,43 +2,181 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Electromagnetic Wave Simulation</title>
     <style>
-        body { font-family: sans-serif; background: #121212; color: #fff; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        canvas { background: #000; border: 1px solid #333; border-radius: 8px; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+        h2 {
+            margin-bottom: 5px;
+        }
+        p {
+            color: #aaaaaa;
+            margin-bottom: 20px;
+        }
+        canvas {
+            background-color: #000000;
+            border: 1px solid #333333;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 30px;
+            background: #1e1e1e;
+            padding: 15px 30px;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input[type="range"] {
+            cursor: pointer;
+        }
+        .legend {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+        }
+        .legend span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .color-box {
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
+        }
     </style>
 </head>
 <body>
+
     <h2>Real-Time EM Wave Propagation</h2>
+    <p>Visualizing Maxwell's Equations: Perpendicular oscillating fields</p>
+
     <canvas id="emCanvas" width="800" height="400"></canvas>
+
+    <div class="legend">
+        <span><div class="color-box" style="background: #ff4444;"></div> Electric Field (E)</span>
+        <span><div class="color-box" style="background: #44aaff;"></div> Magnetic Field (B)</span>
+    </div>
+
+    <div class="controls">
+        <div class="control-group">
+            <label for="wavelength">Wavelength (λ)</label>
+            <input type="range" id="wavelength" min="50" max="300" value="150">
+        </div>
+        <div class="control-group">
+            <label for="speed">Wave Speed (v)</label>
+            <input type="range" id="speed" min="1" max="15" value="4">
+        </div>
+    </div>
+
     <script>
         const canvas = document.getElementById('emCanvas');
         const ctx = canvas.getContext('2d');
+        const wavelengthSlider = document.getElementById('wavelength');
+        const speedSlider = document.getElementById('speed');
+
         let time = 0;
 
         function animate() {
+            // Clear the canvas for the next frame
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            const centerY = canvas.height / 2;
-            const k = (2 * Math.PI) / 150;
-            const omega = 4 * 0.05; 
 
-            ctx.beginPath(); ctx.moveTo(0, centerY); ctx.lineTo(canvas.width, centerY); ctx.strokeStyle = '#555'; ctx.stroke();
+            const width = canvas.width;
+            const height = canvas.height;
+            const centerY = height / 2;
+            const amplitude = 120;
+            
+            const wavelength = parseInt(wavelengthSlider.value);
+            const speed = parseInt(speedSlider.value);
+            
+            // Wave number (k) and angular frequency (omega)
+            const k = (2 * Math.PI) / wavelength;
+            const omega = speed * 0.05; 
 
-            let ePoints = [], bPoints = [];
-            for (let x = 0; x < canvas.width; x += 15) {
-                const waveVal = 120 * Math.sin(k * x - time * omega);
+            // Draw the central axis of propagation
+            ctx.beginPath();
+            ctx.moveTo(0, centerY);
+            ctx.lineTo(width, centerY);
+            ctx.strokeStyle = '#555555';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            ctx.lineWidth = 1.5;
+
+            // Arrays to store the envelope points for the continuous curve
+            let ePoints = [];
+            let bPoints = [];
+
+            // Calculate and draw the field vectors
+            for (let x = 0; x < width; x += 15) {
+                const phase = k * x - time * omega;
+                const waveVal = amplitude * Math.sin(phase);
+
+                // --- Electric Field (Vertical Y-Axis / Red) ---
                 const eY = centerY - waveVal;
                 ePoints.push({x: x, y: eY});
-                ctx.beginPath(); ctx.moveTo(x, centerY); ctx.lineTo(x, eY); ctx.strokeStyle = 'rgba(255, 68, 68, 0.7)'; ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.moveTo(x, centerY);
+                ctx.lineTo(x, eY);
+                ctx.strokeStyle = 'rgba(255, 68, 68, 0.7)';
+                ctx.stroke();
 
+                // --- Magnetic Field (Projected Z-Axis / Blue) ---
+                // Simulating 3D depth by drawing the z-axis at a 45-degree angle
                 const angle = Math.PI / 4; 
                 const bX = x - waveVal * Math.cos(angle) * 0.4;
                 const bY = centerY + waveVal * Math.sin(angle) * 0.4;
                 bPoints.push({x: bX, y: bY});
-                ctx.beginPath(); ctx.moveTo(x, centerY); ctx.lineTo(bX, bY); ctx.strokeStyle = 'rgba(68, 170, 255, 0.7)'; ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(x, centerY);
+                ctx.lineTo(bX, bY);
+                ctx.strokeStyle = 'rgba(68, 170, 255, 0.7)';
+                ctx.stroke();
             }
-            time += 1; requestAnimationFrame(animate);
+
+            // Draw the continuous outer envelope curve for the Electric Field
+            ctx.beginPath();
+            ctx.moveTo(ePoints[0].x, ePoints[0].y);
+            for(let i = 1; i < ePoints.length; i++) {
+                ctx.lineTo(ePoints[i].x, ePoints[i].y);
+            }
+            ctx.strokeStyle = '#ff4444';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Draw the continuous outer envelope curve for the Magnetic Field
+            ctx.beginPath();
+            ctx.moveTo(bPoints[0].x, bPoints[0].y);
+            for(let i = 1; i < bPoints.length; i++) {
+                ctx.lineTo(bPoints[i].x, bPoints[i].y);
+            }
+            ctx.strokeStyle = '#44aaff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            time += 1;
+            requestAnimationFrame(animate); // Loop the animation
         }
+
+        // Start the animation
         animate();
     </script>
 </body>
