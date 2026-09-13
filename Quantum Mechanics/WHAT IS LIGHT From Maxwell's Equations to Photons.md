@@ -14,7 +14,7 @@ Light is a form of electromagnetic radiation[cite: 1]. In classical electrodynam
 *   **Polarization:** As transverse waves, light can be polarized, meaning its electric field oscillates in a specific geometric orientation[cite: 1].
 
 🖥️ **Interactive Simulation:** 
-👉 **[Launch Simulation 1: EM Wave Propagation](https://htmlpreview.github.io/?https://github.com/mohauop/physics-101/blob/main/Quantum%20Mechanics/em_wave.html)**
+👉 **[Launch Simulation 1: EM Wave Propagation](https://htmlpreview.github.io/?https://github.com/mohauop/physics-101/blob/main/Quantum%20Mechanics/htmls/em_wave.html)**
 *(Instructions: Click the link, download the raw HTML file, and open it in any web browser to see the 3D wave fields in action.)*
 
 ---
@@ -26,7 +26,7 @@ In 1888, Heinrich Hertz built a circuit to experimentally verify Maxwell's predi
 *   **The Discovery:** Hertz generated these waves and proved they could be reflected, refracted, and diffracted just like visible light[cite: 1].
 
 🖥️ **Interactive Simulation:** 
-👉 **[Launch Simulation 2: Hertz's Spark-Gap Experiment](https://htmlpreview.github.io/?https://github.com/mohauop/physics-101/blob/main/Quantum%20Mechanics/hertz.html)**
+👉 **[Launch Simulation 2: Hertz's Spark-Gap Experiment](https://htmlpreview.github.io/?https://github.com/mohauop/physics-101/blob/main/Quantum%20Mechanics/htmls/hertz.html)**
 *(Instructions: Click the link, download the raw HTML file, and open it in your browser to watch the accelerating charges emit radiation.)*
 
 ---
@@ -35,7 +35,7 @@ In 1888, Heinrich Hertz built a circuit to experimentally verify Maxwell's predi
 Because light is an electromagnetic wave, it experiences diffraction when passing through an aperture whose size is comparable to its wavelength[cite: 1]. When diffracted waves overlap, their instantaneous amplitudes add together to create distinct interference patterns[cite: 1].
 
 🖥️ **Interactive Simulation:** 
-👉 **[Launch Simulation 3: Multi-Slit Diffraction Grating](https://htmlpreview.github.io/?https://github.com/mohauop/physics-101/blob/main/Quantum%20Mechanics/diffraction.html)**
+👉 **[Launch Simulation 3: Multi-Slit Diffraction Grating](https://htmlpreview.github.io/?https://github.com/mohauop/physics-101/blob/main/Quantum%20Mechanics/htmls/diffraction.html)**
 *(Instructions: Click the link, download the raw HTML file, and open it in your browser to manipulate the overlapping waves and interference bands.)*
 
 ### The Quantum Leap
